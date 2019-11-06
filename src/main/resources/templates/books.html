@@ -1,15 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://unpkg.com/bootstrap@3.4.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/book.css" rel="stylesheet"/>
+    <link href="/home.css" rel="stylesheet"/>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
     <title>Book Example</title>
-    <link href="https://unpkg.com/bootstrap@3.4.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/book.css" rel="stylesheet"/>
+
 </head>
 <body>
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
+        <a class="navbar-brand" href="/">Home</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        </div>
+    </nav>
+</header>
 <div class="container">
     <h1>Book Demo</h1>
     <main id="app">
@@ -34,9 +49,9 @@
         <div>{{ book.pageNum }}</div>
         <br/>
         <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
-        <a>
+        <button type="button" class="btn btn-light">
             <router-link to="/">Back to book list</router-link>
-        </a>
+        </button>
     </div>
 </template>
 
@@ -167,15 +182,21 @@
 <template id="book-chapter">
     <div>
         <h2>{{ book.name }}</h2>
+        <h2>All Chapters : </h2>
         <div v-for="chapter in bookChapterNumber">
             <a>
-                <router-link :to="{name: 'book-page', params: {book_id: book.id, chapter_number: chapter}}">{{ chapter }}</router-link>
+                <router-link :to="{name: 'book-page', params: {book_id: book.id, chapter_number: chapter}}">Chapter {{ chapter }}</router-link>
             </a>
         </div>
+        <br/>
         <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
-        <a>
-            <router-link :to="{name: 'book', params: {book_id: book.id}}">Back</router-link>
-        </a>
+        <button type="button" class="btn btn-lighty">
+            <router-link :to="{name: 'book', params: {book_id: book.id}}">Back to the Book</router-link>
+        </button>
+        <button type="button" class="btn btn-light">
+            <router-link to="/">Back to Book List</router-link>
+        </button>
+
     </div>
 </template>
 
@@ -183,15 +204,21 @@
     <div>
         <h2>{{ book.name }}</h2>
         <h2>Chapter {{bookChapterNumber}}</h2>
+        <h2>Pages</h2>
         <div v-for="page in bookPageNumber">
             <a>
                 <router-link :to="{name: 'read-page', params: {book_id: book.id, chapter_number: bookChapterNumber, page_number: page}}">{{ page }}</router-link>
             </a>
         </div>
+        <br/>
         <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
-        <a>
-            <router-link :to="{name: 'book-chapter', params: {book_id: book.id}}">Back</router-link>
-        </a>
+        <button type="button" class="btn btn-light">
+            <router-link :to="{name: 'book-chapter', params: {book_id: book.id}}">Back to Chapter List</router-link>
+        </button>
+        <button type="button" class="btn btn-light">
+            <router-link :to="{name: 'book', params: {book_id: book.id}}">Back to the Book</router-link>
+        </button>
+
     </div>
 </template>
 
@@ -201,15 +228,16 @@
         <h2>Chapter {{bookChapterNumber}}</h2>
         <h2>Page {{bookPageNumber}}</h2>
         <div v-for="page in bookPageNumber">
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+            when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,
+            remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
+            and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
         </div>
+        <br/>
         <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
-        <a>
-            <router-link :to="{name: 'book-chapter', params: {book_id: book.id}}">Back</router-link>
-        </a>
+        <button type="button" class="btn btn-light">
+            <router-link :to="{name: 'book-page', params: {book_id: book.id,chapter_number: bookChapterNumber}}">Back</router-link>
+        </button>
     </div>
 </template>
 
@@ -217,7 +245,6 @@
 <script src="https://unpkg.com/vue-router@3.0.2/dist/vue-router.js"></script>
 <script src="https://unpkg.com/axios@0.18.0/dist/axios.min.js"></script>
 <script src="/book.js"></script>
-
 </body>
 </html>
 
