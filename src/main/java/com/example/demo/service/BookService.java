@@ -3,9 +3,10 @@ package com.example.demo.service;
 import com.example.demo.model.BookModel;
 import com.example.demo.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.xml.bind.ValidationException;
+import java.awt.print.Book;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,16 +24,64 @@ public class BookService {
         return bookRepository.findAll();
     }
 
-    public Optional<BookModel> findById(Integer id){
-        return bookRepository.findById(id);
+    public ResponseEntity<BookModel> findById(Integer id){
+        Optional<BookModel> bookModel = bookRepository.findById(id);
+        if (!bookModel.isPresent()){
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(bookModel.get());
     }
 
-    public BookModel save(BookModel bookModel){
-        return bookRepository.save(bookModel);
+    public ResponseEntity<BookModel> save(BookModel bookModel){
+        Optional<BookModel> bookModelByName = bookRepository.findByName(bookModel.getName());
+        if(bookModelByName.isPresent()){
+           return ResponseEntity.badRequest().build();
+        }else{
+            return ResponseEntity.ok(bookRepository.save(bookModel));
+        }
     }
 
-    public void deleteById(Integer id){
+    public ResponseEntity<BookModel> update(Integer id, BookModel bookModel){
+        if (!bookRepository.findById(id).isPresent()){
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(bookRepository.save(bookModel));
+    }
+
+    public ResponseEntity deleteById(Integer id){
+        if (bookRepository.findById(id).isPresent()){
+            return ResponseEntity.badRequest().build();
+        }
         bookRepository.deleteById(id);
+        return ResponseEntity.ok().build();
     }
+
+
+    public ResponseEntity<Integer> getChapter(Integer id){
+        Optional<BookModel> bookModel = bookRepository.findById(id);
+        if (!bookModel.isPresent()){
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(bookModel.get().getChapterNumber());
+    }
+
+    public ResponseEntity<Integer> getPage(Integer id){
+        Optional<BookModel> bookModel = bookRepository.findById(id);
+        if (!bookModel.isPresent()){
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(bookModel.get().getPageNum());
+    }
+
+    public ResponseEntity<Integer> readPage(Integer id){
+        Optional<BookModel> bookModel = bookRepository.findById(id);
+        if (!bookModel.isPresent()){
+           return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(bookModel.get().getPageNum());
+    }
+
+
+
 
 }

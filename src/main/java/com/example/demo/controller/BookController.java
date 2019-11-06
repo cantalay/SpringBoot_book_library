@@ -7,9 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.xml.bind.ValidationException;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/book")
@@ -29,63 +27,37 @@ public class BookController {
 
     @PostMapping
     public ResponseEntity createBook(@Valid @RequestBody BookModel bookModel) {
-        return ResponseEntity.ok(bookService.save(bookModel));
+        return bookService.save(bookModel);
     }
 
     @GetMapping("/{id}/chapter/")
     public ResponseEntity<Integer> getChapter(@PathVariable Integer id){
-        Optional<BookModel> bookModel = bookService.findById(id);
-        if (!bookModel.isPresent()){
-            ResponseEntity.badRequest().build();
-        }
-        //System.out.println(bookModel.get().getChapterNumber());
-        return ResponseEntity.ok(bookModel.get().getChapterNumber());
+        return bookService.getChapter(id);
     }
 
     @GetMapping("/{id}/chapter/{chapterNumber}/page/")
     public ResponseEntity<Integer> getPage(@PathVariable Integer id,@PathVariable Integer chapterNumber){
-        Optional<BookModel> bookModel = bookService.findById(id);
-        if (!bookModel.isPresent()){
-            ResponseEntity.badRequest().build();
-        }
-        System.out.println(bookModel.get().getPageNum());
-        return ResponseEntity.ok(bookModel.get().getPageNum());
+        return bookService.getPage(id);
     }
+
     @GetMapping("/{id}/chapter/{chapterNumber}/page/{pageNumber}")
     public ResponseEntity<Integer> readPage(@PathVariable Integer id,@PathVariable Integer chapterNumber,@PathVariable Integer pageNumber){
-        Optional<BookModel> bookModel = bookService.findById(id);
-        if (!bookModel.isPresent()){
-            ResponseEntity.badRequest().build();
-        }
-        System.out.println(bookModel.get().getPageNum());
-        return ResponseEntity.ok(bookModel.get().getPageNum());
+        return bookService.readPage(id);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<BookModel> findById(@PathVariable Integer id){
-        Optional<BookModel> bookModel = bookService.findById(id);
-        if (!bookModel.isPresent()){
-            ResponseEntity.badRequest().build();
-        }
-
-        return ResponseEntity.ok(bookModel.get());
+        return bookService.findById(id);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<BookModel> update(@PathVariable Integer id, @Valid @RequestBody BookModel bookModel){
-        if (!bookService.findById(id).isPresent()){
-            ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok(bookService.save(bookModel));
+        return bookService.update(id,bookModel);
     }
 
-    @DeleteMapping("{/id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable Integer id){
-        if (!bookService.findById(id).isPresent()){
-            ResponseEntity.badRequest().build();
-        }
-        bookService.deleteById(id);
-        return ResponseEntity.ok().build();
+        return bookService.deleteById(id);
     }
 
 }

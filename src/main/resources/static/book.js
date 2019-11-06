@@ -30,21 +30,30 @@ var bookService = {
     create(book, fn) {
         axios
             .post('/book', book)
-            .then(response => fn(response))
-    .catch(error => console.log(error))
+            .then(response => {
+                alert("Book created successfully");
+                fn(response)})
+    .catch(error =>  {
+        console.log(error);
+        alert('This book already added!');
+    })
     },
 
     update(id, book, fn) {
         axios
             .put('/book/' + id, book)
-            .then(response => fn(response))
+            .then(response => {
+                alert("Book updated successfully");
+                fn(response)})
     .catch(error => console.log(error))
     },
 
     deleteBook(id, fn) {
         axios
             .delete('/book/' + id)
-            .then(response => fn(response))
+            .then(response => {
+                alert("Book deleted successfully");
+                fn(response)})
     .catch(error => console.log(error))
     },
 
@@ -71,7 +80,7 @@ var bookService = {
             .catch(error => console.log(error))
     }
 
-}
+};
 
 var List = Vue.extend({
     template: '#book-list',
@@ -103,7 +112,7 @@ var AddBook = Vue.extend({
     template: '#add-book',
     data() {
         return {
-            book: {name: '', author: '', pageNum: 0}
+            book: {name: '', author: '', pageNum: 0, chapterNumber:0}
         }
     },
     methods: {
@@ -153,7 +162,7 @@ var BookPage = Vue.extend({
     template: '#book-page',
     data: function () {
         console.log("CHAPTER NUMBER IS COMMING: "+this.$route.params.chapter_number);
-        return{book: findBook(this.$route.params.book_id), bookChapterNumber:this.$route.params.chapter_number,bookPageNumber:100};
+        return{book: findBook(this.$route.params.book_id), bookChapterNumber:this.$route.params.chapter_number,bookPageNumber:0};
     },
     mounted() {
         bookService.getPageNumber(this.book.id, this.bookChapterNumber, r=>this.bookPageNumber = r.data )
@@ -187,4 +196,4 @@ var router = new VueRouter({
 
 new Vue({
     router
-}).$mount('#app')
+}).$mount('#app');

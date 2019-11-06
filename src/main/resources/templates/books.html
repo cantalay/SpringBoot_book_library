@@ -28,7 +28,7 @@
 <div class="container">
     <h1>Book Demo</h1>
     <main id="app">
-        <router-view></router-view>
+
     </main>
 </div>
 
@@ -120,14 +120,14 @@
             </div>
             <div class="form-group">
                 <label for="add-author">Author</label>
-                <textarea class="form-control" id="add-author" rows="10" v-model="book.author"></textarea>
+                <input class="form-control" id="add-author" required v-model="book.author"></input>
             </div>
             <div class="form-group">
-                <label for="add-chapterNumber">Chapter Number, </label>
+                <label for="add-chapterNumber">Chapter Number </label>
                 <input type="number" class="form-control" id="add-chapterNumber" v-model="book.chapterNumber"/>
             </div>
             <div class="form-group">
-                <label for="add-bookNum">Page Number, </label>
+                <label for="add-bookNum">Page Number </label>
                 <input type="number" class="form-control" id="add-bookNum" v-model="book.pageNum"/>
             </div>
             <button type="submit" class="btn btn-primary">Create</button>
@@ -207,7 +207,7 @@
         <h2>Pages</h2>
         <div v-for="page in bookPageNumber">
             <a>
-                <router-link :to="{name: 'read-page', params: {book_id: book.id, chapter_number: bookChapterNumber, page_number: page}}">{{ page }}</router-link>
+                <router-link :to="{name: 'read-page', params: {book_id: book.id, chapter_number: bookChapterNumber, page_number: page}}">Page {{ page }}</router-link>
             </a>
         </div>
         <br/>
