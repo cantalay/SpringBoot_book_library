@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Book Example</title>
+    <link href="https://unpkg.com/bootstrap@3.4.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/book.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="container">
+    <h1>Book Demo</h1>
+    <main id="app">
+        <router-view></router-view>
+    </main>
+</div>
+
+<template id="book">
+    <div>
+        <h2>{{ book.name }}</h2>
+        <b>Author: </b>
+        <div>{{ book.author }}</div>
+        <b>Chapter Number:</b>
+        <div>
+            <a>
+                <router-link :to="{name: 'book-chapter', params: {book_id: book.id}}">{{ book.chapterNumber }}
+                </router-link>
+            </a>
+        </div>
+
+        <b>Page Number:</b>
+        <div>{{ book.pageNum }}</div>
+        <br/>
+        <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
+        <a>
+            <router-link to="/">Back to book list</router-link>
+        </a>
+    </div>
+</template>
+
+<template id="book-list">
+    <div>
+        <div class="actions">
+            <a class="btn btn-default">
+                <router-link :to="{path: '/add-book'}">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    Add book
+                </router-link>
+            </a>
+        </div>
+        <div class="filters row">
+            <div class="form-group col-sm-3">
+                <input placeholder="Search" v-model="searchKey" class="form-control" id="search-element" required/>
+            </div>
+        </div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Author Name</th>
+                <th>Chapter Number</th>
+                <th>Page Number</th>
+                <th class="col-sm-2">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="book in filteredBooks">
+                <!-- tr v-for="book in books" -->
+                <!-- tr v-for="book in books | filterBy searchKey in 'name'" -->
+                <td>
+                    <a>
+                        <router-link :to="{name: 'book', params: {book_id: book.id}}">{{ book.name }}</router-link>
+                    </a>
+                </td>
+                <td>{{ book.author }}</td>
+                <td>{{book.chapterNumber}}</td>
+                <td>
+                    {{ book.pageNum }}
+                </td>
+
+                <td>
+                    <a class="btn btn-warning btn-xs">
+                        <router-link :to="{name: 'book-edit', params: {book_id: book.id}}">Edit</router-link>
+                    </a>
+                    <a class="btn btn-danger btn-xs">
+                        <router-link :to="{name: 'book-delete', params: {book_id: book.id}}">Delete</router-link>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</template>
+
+
+<template id="add-book">
+    <div>
+        <h2>Add new book</h2>
+        <form @submit="createBook">
+            <div class="form-group">
+                <label for="add-name">Name</label>
+                <input class="form-control" id="add-name" v-model="book.name" required/>
+            </div>
+            <div class="form-group">
+                <label for="add-author">Author</label>
+                <textarea class="form-control" id="add-author" rows="10" v-model="book.author"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="add-chapterNumber">Chapter Number, </label>
+                <input type="number" class="form-control" id="add-chapterNumber" v-model="book.chapterNumber"/>
+            </div>
+            <div class="form-group">
+                <label for="add-bookNum">Page Number, </label>
+                <input type="number" class="form-control" id="add-bookNum" v-model="book.pageNum"/>
+            </div>
+            <button type="submit" class="btn btn-primary">Create</button>
+            <a class="btn btn-default">
+                <router-link to="/">Cancel</router-link>
+            </a>
+        </form>
+    </div>
+</template>
+
+<template id="book-edit">
+    <div>
+        <h2>Edit book</h2>
+        <form @submit="updateBook">
+            <div class="form-group">
+                <label for="edit-name">Name</label>
+                <input class="form-control" id="edit-name" v-model="book.name" required/>
+            </div>
+            <div class="form-group">
+                <label for="edit-author">Author</label>
+                <textarea class="form-control" id="edit-author" rows="3" v-model="book.author"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="edit-chapterNumber">Chapter Number, </span></label>
+                <input type="number" class="form-control" id="edit-chapterNumber" v-model="book.chapterNumber"/>
+            </div>
+            <div class="form-group">
+                <label for="edit-pageNum">Page Number, </span></label>
+                <input type="number" class="form-control" id="edit-pageNum" v-model="book.pageNum"/>
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a class="btn btn-default">
+                <router-link to="/">Cancel</router-link>
+            </a>
+        </form>
+    </div>
+</template>
+
+<template id="book-delete">
+    <div>
+        <h2>Delete book {{ book.name }}</h2>
+        <form @submit="deleteBook">
+            <p>The action cannot be undone.</p>
+            <button type="submit" class="btn btn-danger">Delete</button>
+            <a class="btn btn-default">
+                <router-link to="/">Cancel</router-link>
+            </a>
+        </form>
+    </div>
+</template>
+
+<template id="book-chapter">
+    <div>
+        <h2>{{ book.name }}</h2>
+        <div v-for="chapter in bookChapterNumber">
+            <a>
+                <router-link :to="{name: 'book-page', params: {book_id: book.id, chapter_number: chapter}}">{{ chapter }}</router-link>
+            </a>
+        </div>
+        <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
+        <a>
+            <router-link :to="{name: 'book', params: {book_id: book.id}}">Back</router-link>
+        </a>
+    </div>
+</template>
+
+<template id="book-page">
+    <div>
+        <h2>{{ book.name }}</h2>
+        <h2>Chapter {{bookChapterNumber}}</h2>
+        <div v-for="page in bookPageNumber">
+            <a>
+                <router-link :to="{name: 'read-page', params: {book_id: book.id, chapter_number: bookChapterNumber, page_number: page}}">{{ page }}</router-link>
+            </a>
+        </div>
+        <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
+        <a>
+            <router-link :to="{name: 'book-chapter', params: {book_id: book.id}}">Back</router-link>
+        </a>
+    </div>
+</template>
+
+<template id="read-page">
+    <div>
+        <h2>{{ book.name }}</h2>
+        <h2>Chapter {{bookChapterNumber}}</h2>
+        <h2>Page {{bookPageNumber}}</h2>
+        <div v-for="page in bookPageNumber">
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+
+        </div>
+        <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
+        <a>
+            <router-link :to="{name: 'book-chapter', params: {book_id: book.id}}">Back</router-link>
+        </a>
+    </div>
+</template>
+
+<script src="https://unpkg.com/vue@2.5.22/dist/vue.js"></script>
+<script src="https://unpkg.com/vue-router@3.0.2/dist/vue-router.js"></script>
+<script src="https://unpkg.com/axios@0.18.0/dist/axios.min.js"></script>
+<script src="/book.js"></script>
+
+</body>
+</html>
+
