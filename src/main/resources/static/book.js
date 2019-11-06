@@ -34,7 +34,7 @@ var bookService = {
                 alert("Book created successfully");
                 fn(response)})
     .catch(error =>  {
-        console.log(error);
+        console.log(error)
         alert('This book already added!');
     })
     },
@@ -80,7 +80,7 @@ var bookService = {
             .catch(error => console.log(error))
     }
 
-};
+}
 
 var List = Vue.extend({
     template: '#book-list',
@@ -196,4 +196,4 @@ var router = new VueRouter({
 
 new Vue({
     router
-}).$mount('#app');
+}).$mount('#app')

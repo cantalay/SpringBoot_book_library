@@ -49,7 +49,7 @@ public class BookService {
     }
 
     public ResponseEntity deleteById(Integer id){
-        if (bookRepository.findById(id).isPresent()){
+        if (!bookRepository.findById(id).isPresent()){
             return ResponseEntity.badRequest().build();
         }
         bookRepository.deleteById(id);
